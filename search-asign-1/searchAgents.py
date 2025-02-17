@@ -292,8 +292,11 @@ class CornersProblem(search.SearchProblem):
             if not startingGameState.hasFood(*corner):
                 print('Warning: no food in corner ' + str(corner))
         self._expanded = 0 # DO NOT CHANGE; Number of search nodes expanded
+        
         # Please add any code here which you would like to use
         # in initializing the problem
+        self.startState = (self.startingPosition, ())  # empty tuple to hold visited corners
+        
         self.startingGameState = startingGameState
 
     def getStartState(self):
@@ -303,7 +306,7 @@ class CornersProblem(search.SearchProblem):
         
         "*** YOUR CODE HERE *** (Q5)"
         """ A state space can be the start coordinates and a list to hold visited corners"""
-        util.raiseNotDefined()
+        return self.startState
 
     def isGoalState(self, state: Any):
         """
@@ -312,8 +315,8 @@ class CornersProblem(search.SearchProblem):
         "*** YOUR CODE HERE *** (Q5)"
         
         """ Check to see if a state is a corner, and if so are the other corners visited """
-        
-        util.raiseNotDefined()
+        _, visited_corners = state
+        return len(visited_corners) == 4 # Goal if all corners are visited
 
     def getSuccessors(self, state: Any):
         """
@@ -328,6 +331,8 @@ class CornersProblem(search.SearchProblem):
 
         successors = []
 
+        currentPosition, visited_corners = state
+
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall:
@@ -337,6 +342,23 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE *** (Q5)"
+            # Compute next position based on action
+            x, y = currentPosition
+            dx, dy = Actions.directionToVector(action)
+            next_x, next_y = int(x + dx), int(y + dy)
+
+            # Check if the next position hits a wall
+            if not self.walls[next_x][next_y]:
+                # Check if the next position is a corner
+                next_position = (next_x, next_y)
+
+                # Update visited corners
+                next_visited_corners = visited_corners
+                if next_position in self.corners and next_position not in visited_corners:
+                    next_visited_corners = visited_corners + (next_position,)
+
+                # Add the successor
+                successors.append(((next_position, tuple(next_visited_corners)), action, 1))
 
 
         self._expanded += 1 # DO NOT CHANGE
