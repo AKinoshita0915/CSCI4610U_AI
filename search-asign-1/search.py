@@ -224,7 +224,7 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
             # Push the successors of the state to the priority queue
             for successor, action, step_cost in problem.getSuccessors(state):
                 new_cost = cost + step_cost
-                priority = new_cost + heuristic(successor, problem) # f(n) = g(n) + h(n)
+                priority = new_cost + heuristic(successor, problem) # Calculate priority with heuristic: f(n) = g(n) + h(n)
                 if successor not in visited or visited[successor] > new_cost:
                     pq.push((successor, path + [action], new_cost), priority)
 
