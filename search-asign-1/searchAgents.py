@@ -402,10 +402,16 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
     if not remaining_corners:
         return 0
     
-    # Heuristic by taking maximum Manhattan distance to any remaining corner
+    # Heuristic: Manhattan distance to farthest corner from the closest corner
     distances = [util.manhattanDistance(current_position, corner) for corner in remaining_corners]
-    return max(distances)
     
+    # Pick closest and farthest corners
+    closest_corner = min(distances)
+    farthest_corner = max(distances)
+
+    # Return the heuristic
+    return closest_corner + farthest_corner
+
 
 
 
