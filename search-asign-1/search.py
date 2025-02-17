@@ -155,9 +155,36 @@ def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
     
     "*** YOUR CODE HERE *** (Q3)"
-    
+    print("Start:", problem.getStartState())
+    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
+    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
 
-    util.raiseNotDefined()
+    # Initialize priority queue for UCS
+    pq = util.PriorityQueue()
+    pq.push((problem.getStartState(), [], 0), 0) # (state, path, cost), priority = cost
+
+    # Track the cost of the path
+    visited = {}
+
+    while not pq.isEmpty():
+        # Take the top element from the priority queue
+        state, path, cost = pq.pop()
+
+        # Check if the state is the goal state
+        if problem.isGoalState(state):
+            return path
+
+        # Check if the state is visited or the cost is lower
+        if state not in visited or visited[state] > cost:
+            visited[state] = cost
+
+            # Push the successors of the state to the priority queue
+            for successor, action, stepCost in problem.getSuccessors(state):
+                new_cost = cost + stepCost
+                pq.push((successor, path + [action], new_cost), new_cost)
+
+    return [] # If no path is found
+    
 
 def nullHeuristic(state, problem=None):
     """
