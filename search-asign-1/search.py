@@ -122,8 +122,34 @@ def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
     
     "*** YOUR CODE HERE *** (Q2)"
-    
-    util.raiseNotDefined()
+    print("Start:", problem.getStartState())
+    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
+    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+
+    # Initialize queue for BFS
+    queue = util.Queue()
+    queue.push((problem.getStartState(), []))
+
+    # Initialize visited set
+    visited = set()
+
+    while not queue.isEmpty():
+        # Take the front element from the queue
+        state, path = queue.pop()
+
+        # Check if the state is the goal state
+        if problem.isGoalState(state):
+            return path
+
+        # Check if the state is visited
+        if state not in visited:
+            visited.add(state)
+
+            # Push the successors of the state to the queue
+            for successor, action, cost in problem.getSuccessors(state):
+                queue.push((successor, path + [action]))
+
+    return [] # If no path is found
 
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
