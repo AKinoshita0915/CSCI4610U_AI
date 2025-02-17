@@ -227,6 +227,8 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
                 priority = new_cost + heuristic(successor, problem) # Calculate priority with heuristic: f(n) = g(n) + h(n)
                 if successor not in visited or visited[successor] > new_cost:
                     pq.push((successor, path + [action], new_cost), priority)
+    
+    return [] # If no path is found
 
     
 
