@@ -197,8 +197,40 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     
     "*** YOUR CODE HERE *** (Q4)"
+    print("Start:", problem.getStartState())
+    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
+    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
 
-    util.raiseNotDefined()
+    # Initialize priority queue for A*
+    pq = util.PriorityQueue()
+    start_state = problem.getStartState()
+    pq.push((start_state, [], 0), 0) # (state, path, cost), priority = cost + heuristic
+
+    # Track the cost of the path
+    visited = {}
+
+    while not pq.isEmpty():
+        # Take the top element from the priority queue
+        state, path, cost = pq.pop()
+
+        # Check if the state is the goal state
+        if problem.isGoalState(state):
+            return path
+
+        # Check if the state is visited or the cost is lower
+        if state not in visited or visited[state] > cost:
+            visited[state] = cost
+
+            # Push the successors of the state to the priority queue
+            for successor, action, step_cost in problem.getSuccessors(state):
+                new_cost = cost + step_cost
+                priority = new_cost + heuristic(successor, problem) # f(n) = g(n) + h(n)
+                if successor not in visited or visited[successor] > new_cost:
+                    pq.push((successor, path + [action], new_cost), priority)
+
+    
+
+
 
 
 # Abbreviations
